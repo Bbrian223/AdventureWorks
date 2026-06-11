@@ -1,4 +1,8 @@
 
+using Ad.Works.Infrastructure.Interfaces;
+using Ad.Works.Infrastructure.Repositories;
+using Ad.Works.Application.Interfaces;
+using Ad.Works.Application.Services;
 using Microsoft.EntityFrameworkCore;
 using Ad.Works.Infrastructure.Persistence;
 namespace Ad.Works.Api
@@ -13,6 +17,9 @@ namespace Ad.Works.Api
             // Add services to the container.
 
             builder.Services.AddDbContext<AdventureWorksDbContext>(opt => opt.UseSqlServer(connectionString));
+
+            builder.Services.AddScoped<IProductRepository, ProductRepository>();
+            builder.Services.AddScoped<IProductServices, ProductServices>();
 
             builder.Services.AddControllers();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
