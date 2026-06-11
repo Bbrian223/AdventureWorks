@@ -9,7 +9,7 @@ namespace Ad.Works.Application.Interfaces
 {
     public interface IProductServices
     {
-        public Task<IEnumerable<ProductDTO>> GetAllAsync();
+        public Task<IEnumerable<ProductListDTO>> GetListAsync();
 
         public Task<ProductDTO> GetAsync(int id);
     }

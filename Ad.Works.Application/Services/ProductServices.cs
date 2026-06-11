@@ -19,20 +19,19 @@ namespace Ad.Works.Application.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetAllAsync()
+        public async Task<IEnumerable<ProductListDTO>> GetListAsync()
         {
-            List<ProductDTO> nList = new List<ProductDTO>();
+            var nList = new List<ProductListDTO>();
 
-            var list = await _repository.GetAllAsync();
+            var list = await _repository.GetListAsync();
 
             foreach (var item in list) {
-                nList.Add(new ProductDTO { 
+                nList.Add(new ProductListDTO { 
                     ProductId = item.ProductId,
                     Name = item.Name,
-                    Color = item.Color,
                     ProductNumber = item.ProductNumber,
-                    SafetyStockLevel = item.SafetyStockLevel,
-                    StandardCost = item.StandardCost
+                    Color = item.Color,
+                    ListPrice = item.ListPrice,
                 });
             }
 
@@ -46,13 +45,16 @@ namespace Ad.Works.Application.Services
 
             var product = await _repository.GetAsync(id);
 
-            return new ProductDTO { 
+            return new ProductDTO {
                 ProductId = product.ProductId,
                 Name = product.Name,
+                ProductNumber = product.ProductNumber,
                 Color = product.Color,
-                ProductNumber= product.ProductNumber,
-                SafetyStockLevel= product.SafetyStockLevel,
-                StandardCost = product.StandardCost
+                Size = product.Size,
+                ListPrice = product.ListPrice,
+                Weight = product.Weight,
+                Model = product.ProductModel?.Name ?? "Sin Modelo",
+                Subcategory = product.ProductSubcategory?.Name ?? "Sin categoria"
             };
 
         }

@@ -19,11 +19,19 @@ namespace Ad.Works.Infrastructure.Repositories
             _context = context;
         }
 
-        #region GET ALL
-        public async Task<IEnumerable<Product>> GetAllAsync()
+        #region GET LIST
+        public async Task<IEnumerable<Product>> GetListAsync()
         {
-            var list = await _context.Products.
-                ToListAsync();
+            var list = await _context.Products
+                .Select(u => new Product { 
+                    ProductId = u.ProductId,
+                    Name = u.Name,
+                    ProductNumber = u.ProductNumber,
+                    Color = u.Color,
+                    ListPrice = u.ListPrice,
+                })
+                .OrderBy(u => u.ProductId)
+                .ToListAsync();
 
             if (!list.Any())
                 return null;
@@ -37,6 +45,8 @@ namespace Ad.Works.Infrastructure.Repositories
         {
             var product = await _context.Products
                 .Where(u => u.ProductId == id)
+                .Include(u => u.ProductModel)
+                .Include(u => u.ProductSubcategory)
                 .SingleOrDefaultAsync();
 
             return product;

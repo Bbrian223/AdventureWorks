@@ -19,7 +19,7 @@ namespace Ad.Works.Api.Controllers
         public async Task<IActionResult> GetAllProducts(){
             try
             {
-                var result = await _service.GetAllAsync();
+                var result = await _service.GetListAsync();
 
                 return Ok(result);
             }
