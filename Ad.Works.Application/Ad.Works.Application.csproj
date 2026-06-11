@@ -18,4 +18,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Ad.Works.Domain\Ad.Works.Domain.csproj" />
+    <ProjectReference Include="..\Ad.Works.Infrastructure\Ad.Works.Infrastructure.csproj" />
+  </ItemGroup>
+
 </Project>
