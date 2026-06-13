@@ -19,7 +19,7 @@ namespace Ad.Works.Infrastructure.Repositories
             _context = context;
         }
 
-        #region GET LIST
+        #region GET LIST PROD
         public async Task<IEnumerable<Product>> GetListAsync()
         {
             var list = await _context.Products
@@ -40,7 +40,7 @@ namespace Ad.Works.Infrastructure.Repositories
         }
         #endregion
 
-        #region GET BY ID
+        #region GET PROD BY ID
         public async Task<Product> GetAsync(int id)
         {
             var product = await _context.Products
@@ -52,5 +52,37 @@ namespace Ad.Works.Infrastructure.Repositories
             return product;
         }
         #endregion
+
+        #region UPDATE PROD
+        public async Task UpdateAsync(Product product)
+        {
+            _context.Products.Attach(product);
+            _context.Entry(product).Property(p => p.Name).IsModified = true;
+            _context.Entry(product).Property(p => p.Color).IsModified = true;
+            _context.Entry(product).Property(p => p.Size).IsModified = true;
+            _context.Entry(product).Property(p => p.Weight).IsModified = true;
+            _context.Entry(product).Property(p => p.ListPrice).IsModified = true;
+
+            await _context.SaveChangesAsync();
+            _context.ChangeTracker.Clear();
+        }
+        #endregion
+
+        #region DISCONTINUED PROD
+        public async Task DiscontinuedAsync(int id)
+        {
+            var rows = await _context.Products
+                .Where(p => p.ProductId == id)
+                .ExecuteUpdateAsync(s => s.SetProperty(
+                    p => p.DiscontinuedDate, DateTime.Now)
+                );
+        }
+        #endregion
+
+        public async Task<bool> Exist(int id) { 
+            return await _context.Products
+                .AnyAsync(p => p.ProductId == id);
+        }
+
     }
 }

@@ -11,5 +11,11 @@ namespace Ad.Works.Infrastructure.Interfaces
     {
         public Task<IEnumerable<Product>> GetListAsync();
         public Task<Product> GetAsync(int id);
+
+        public Task UpdateAsync(Product product);
+
+        public Task DiscontinuedAsync(int id);
+
+        public Task<bool> Exist(int id);
     }
 }

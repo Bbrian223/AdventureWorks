@@ -1,6 +1,7 @@
 ﻿using Ad.Works.Application.DTOs;
 using Ad.Works.Application.Interfaces;
 using Ad.Works.Infrastructure.Interfaces;
+using Ad.Works.Domain.Entities;
 using Ad.Works.Infrastructure.Repositories;
 using System;
 using System.Collections.Generic;
@@ -57,6 +58,36 @@ namespace Ad.Works.Application.Services
                 Subcategory = product.ProductSubcategory?.Name ?? "Sin categoria"
             };
 
+        }
+
+        public async Task<ProductDTO> UpdateAsync(int id, ProductUpdateDTO prod)
+        {
+            // provisorio
+            if (prod.Size.Length > 5)
+                throw new Exception("Max length 5");
+
+            if (!await _repository.Exist(id))
+                throw new Exception("ID not fount. Update canceled");
+
+            await _repository.UpdateAsync(new Product
+            {
+                ProductId = id,
+                Name = prod.Name,
+                Color = prod.Color,
+                Size = prod.Size,
+                Weight = prod.Weight,
+                ListPrice= prod.ListPrice,
+            });
+
+            return await GetAsync(id);
+        }
+
+        public async Task DiscontinuedAsync(int id)
+        {
+            if (!await _repository.Exist(id))
+                throw new Exception("ID not found. Update canceled");
+
+            await _repository.DiscontinuedAsync(id);
         }
     }
 }
