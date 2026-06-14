@@ -1,4 +1,5 @@
 ﻿using Ad.Works.Application.DTOs;
+using Ad.Works.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace Ad.Works.Application.Interfaces
         public Task<IEnumerable<ProductListDTO>> GetListAsync();
         public Task<ProductDTO> GetAsync(int id);
         public Task<ProductDTO> UpdateAsync(int id, ProductUpdateDTO prod);
+        public Task<ProductDTO> CreateAsync(ProductCreateDto prod);
         public Task DiscontinuedAsync(int id);
 
     }

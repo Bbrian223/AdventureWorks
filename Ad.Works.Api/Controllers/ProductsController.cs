@@ -2,6 +2,7 @@
 using Ad.Works.Application.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace Ad.Works.Api.Controllers
 {
@@ -45,9 +46,29 @@ namespace Ad.Works.Api.Controllers
             }
         }
 
+        [HttpPost]
+        public async Task<IActionResult> CreateProduct([FromBody] ProductCreateDto prod)
+        {
+            if(!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var result = await _service.CreateAsync(prod);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest( ex.Message);
+            }
+        }
+
         [HttpPut("{id:int}/update")]
         public async Task<IActionResult> UpdateProduct(int id, [FromBody] ProductUpdateDTO prod)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
             try
             {
                 if (id < 0)

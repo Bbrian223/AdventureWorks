@@ -23,7 +23,7 @@ namespace Ad.Works.Infrastructure.Repositories
         public async Task<IEnumerable<Product>> GetListAsync()
         {
             var list = await _context.Products
-                .Select(u => new Product { 
+                .Select(u => new Product {
                     ProductId = u.ProductId,
                     Name = u.Name,
                     ProductNumber = u.ProductNumber,
@@ -79,10 +79,23 @@ namespace Ad.Works.Infrastructure.Repositories
         }
         #endregion
 
-        public async Task<bool> Exist(int id) { 
+        public async Task<bool> ExistById(int id) {
             return await _context.Products
                 .AnyAsync(p => p.ProductId == id);
         }
 
+        public async Task<bool> ExistByProdNumber(string number)
+        {
+            return await _context.Products
+                .AnyAsync(p => p.ProductNumber == number);
+        }
+
+        public async Task<Product> CreateAsync(Product product)
+        {
+            await _context.Products.AddAsync(product);
+            await _context.SaveChangesAsync();
+
+            return product;
+        }
     }
 }

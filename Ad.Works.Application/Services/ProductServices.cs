@@ -62,11 +62,7 @@ namespace Ad.Works.Application.Services
 
         public async Task<ProductDTO> UpdateAsync(int id, ProductUpdateDTO prod)
         {
-            // provisorio
-            if (prod.Size.Length > 5)
-                throw new Exception("Max length 5");
-
-            if (!await _repository.Exist(id))
+            if (!await _repository.ExistById(id))
                 throw new Exception("ID not fount. Update canceled");
 
             await _repository.UpdateAsync(new Product
@@ -84,10 +80,35 @@ namespace Ad.Works.Application.Services
 
         public async Task DiscontinuedAsync(int id)
         {
-            if (!await _repository.Exist(id))
+            if (await _repository.ExistById(id))
                 throw new Exception("ID not found. Update canceled");
 
             await _repository.DiscontinuedAsync(id);
+        }
+
+        public async Task<ProductDTO> CreateAsync(ProductCreateDto entity)
+        {
+            if (await _repository.ExistByProdNumber(entity.ProductNumber))
+                throw new Exception("Product number already exists");
+
+            var prod = await _repository.CreateAsync(new Product
+            {
+                Name = entity.Name,
+                ProductNumber = entity.ProductNumber,
+                Color = string.IsNullOrWhiteSpace(entity.Color) ? null : entity.Color,
+                Size = string.IsNullOrWhiteSpace(entity.Size) ? null : entity.Size,
+                Weight = entity.Weight,
+                ListPrice = entity.ListPrice,
+
+                SafetyStockLevel = 100,
+                ReorderPoint = 50,
+                StandardCost = 0,
+                DaysToManufacture = 0,
+                SellStartDate = DateTime.UtcNow
+            });
+
+            return await GetAsync(prod.ProductId);
+
         }
     }
 }

@@ -16,6 +16,10 @@ namespace Ad.Works.Infrastructure.Interfaces
 
         public Task DiscontinuedAsync(int id);
 
-        public Task<bool> Exist(int id);
+        public Task<Product> CreateAsync(Product product);
+
+        public Task<bool> ExistById(int id);
+
+        public Task<bool> ExistByProdNumber(string num);
     }
 }
