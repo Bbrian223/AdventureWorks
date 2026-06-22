@@ -9,7 +9,7 @@ namespace Ad.Works.Infrastructure.Interfaces
 {
     public interface IProductRepository
     {
-        public Task<IEnumerable<Product>> GetListAsync();
+        public Task<IEnumerable<Product>> GetListAsync(int cursor, int p_size);
         public Task<Product> GetAsync(int id);
 
         public Task UpdateAsync(Product product);

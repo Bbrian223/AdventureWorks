@@ -18,11 +18,12 @@ namespace Ad.Works.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllProducts(){
+        public async Task<IActionResult> GetAllProducts(
+            [FromQuery] int cursor = 0, 
+            [FromQuery] int p_size = 10){
             try
             {
-                var result = await _service.GetListAsync();
-
+                var result = await _service.GetListAsync(cursor, p_size);
                 return Ok(result);
             }
             catch (Exception ex)

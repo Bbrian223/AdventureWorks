@@ -20,11 +20,17 @@ namespace Ad.Works.Application.Services
             _repository = repository;
         }
 
-        public async Task<IEnumerable<ProductListDTO>> GetListAsync()
+        public async Task<IEnumerable<ProductListDTO>> GetListAsync(int cursor, int p_size)
         {
             var nList = new List<ProductListDTO>();
 
-            var list = await _repository.GetListAsync();
+            if(cursor < 0)
+                throw new Exception("invalid cursor");
+
+            if(p_size < 5 || p_size > 20)
+                throw new Exception("invalid page size.");
+
+            var list = await _repository.GetListAsync(cursor,p_size);
 
             foreach (var item in list) {
                 nList.Add(new ProductListDTO { 
@@ -62,7 +68,7 @@ namespace Ad.Works.Application.Services
 
         public async Task<ProductDTO> UpdateAsync(int id, ProductUpdateDTO prod)
         {
-            if (!await _repository.ExistById(id))
+            if (await _repository.ExistById(id))
                 throw new Exception("ID not fount. Update canceled");
 
             await _repository.UpdateAsync(new Product

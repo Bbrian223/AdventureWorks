@@ -20,7 +20,7 @@ namespace Ad.Works.Infrastructure.Repositories
         }
 
         #region GET LIST PROD
-        public async Task<IEnumerable<Product>> GetListAsync()
+        public async Task<IEnumerable<Product>> GetListAsync(int cursor, int p_size)
         {
             var list = await _context.Products
                 .Select(u => new Product {
@@ -30,7 +30,9 @@ namespace Ad.Works.Infrastructure.Repositories
                     Color = u.Color,
                     ListPrice = u.ListPrice,
                 })
+                .Where(u => u.ProductId > cursor )
                 .OrderBy(u => u.ProductId)
+                .Take(p_size)
                 .ToListAsync();
 
             if (!list.Any())
